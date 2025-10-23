@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arduino Project | William S</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 20px rgba(255, 50, 80, 0.5));
+            margin-bottom: 32px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid rgba(255, 50, 80, 0.8);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: rgba(255, 50, 80, 0.8);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 32px;
+        }
+
+        .back-button:hover {
+            color: rgba(255, 50, 80, 0.85);
+            transform: translateX(-4px);
+        }
+
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 20px rgba(255, 50, 80, 0.5));
+        }
+
+        .hero .subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 15px rgba(255, 50, 80, 0.4));
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 48px;
+            margin-bottom: 60px;
+        }
+
+        .content-box p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 16px;
+        }
+
+        .content-box ul {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .content-box li {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            padding-left: 28px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .content-box li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: rgba(255, 50, 80, 0.8);
+            font-weight: 600;
+        }
+
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .image-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 50, 80, 0.4);
+            box-shadow: 0 12px 40px rgba(255, 50, 80, 0.2);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+
+        .image-caption {
+            padding: 20px;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 50, 80, 0.4);
+            background: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 12px 40px rgba(255, 50, 80, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .section-title {
+                font-size: 32px;
+            }
+
+            .content-box {
+                padding: 32px 24px;
+            }
+
+            .content-box p,
+            .content-box li {
+                font-size: 16px;
+            }
+
+            .images-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .loading-logo {
+                font-size: 36px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-box,
+        .image-card,
+        .feature-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .image-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .image-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .image-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .image-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">WS</div>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <nav>
+                <div class="logo">William S</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="extra.html">Extra</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container">
+            <section class="hero">
+                <a href="index.html#projects" class="back-button">← Back to Projects</a>
+                <h1>Arduino Project</h1>
+                <p class="subtitle">Neopixel • Arduino • Programming</p>
+            </section>
+        </div>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">The Project</h2>
+                <div class="content-box">
+                    <p>For this project, I created a neopixel lighting system using Arduino. The system features three
+                        different lighting modes that can be switched between.</p>
+
+                    <b>Project Goal:</b>
+                    <p>Create a mood lighting outcome using NeoPixels and a push button. The user can cycle through
+                        lighting modes such as:</p>
+                    <ul>
+                        <li>Calm (pulsing blue)</li>
+                        <li>Focus (warm white)</li>
+                        <li>Party (rainbow swirl)</li>
+                        <li>LCD screen stating the current mode and telling you how to change the mode</li>
+                    </ul>
+
+                    <p>This project taught me how to create projects hands on with eletronics and programming.</p>
+
+                    <hr>
+                    <br>
+                    <b>Testing button:</b>
+                    <p>I made sure each mode worked by refining it several times and testing it by pressing the button
+                        at various speeds.</p>
+                    <br>
+                    <b>How I knew each mode worked:</b>
+                    <P>Having tested in tinker cad, where wiring is not required to be as specific like in real life, I
+                        made sure each light mode worked properly with the correct wiring and code in which it does.</P>
+                    <br>
+                    <b>How many times I refined and updated code:</b>
+                    <p>Several times to fix bugs and make sure things looked correct. I also updated my code several
+                        times to try and fix the LCD screen problem however nothing worked. </p>
+
+                    <hr>
+                    <br>
+                    <P>The main problem with the arduino is that the neo pixel is very delicate therefore when you move
+                        around the neo pixel the light flickers lots.</P>
+                    <P>I made sure the button logic was working by pressing it at various speeds during different phases
+                        of the animation.</P>
+                    <P>If the project didn't work as expected, I tried to see if was just the neo pixel flickering, but if it wasn’t I bug checked the function of the animation seeing if anything is incorrect.</P>
+                    <P>Commenting on each individual function helped organization, as well as making each function do its own animation.</P>
+                    <P>I checked the animations on both tinker cad and Arduino making sure the brightness and color was correct. If it wasn’t I would adjust it.</P>
+                    <P>I tried adding a LCD screen to say the mode and how to change the animation. When I added the lcd screen it worked on tinker cad but not Arduino, eventually I scrapped it but moved some components from that to the main project as additional things.</P>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Project Images</h2>
+                <div class="images-grid">
+                    <div class="image-card">
+                        <img src="img/arduino.png">
+                        <div class="image-caption">Neopixel and LCD setup on tinkercad</div>
+                    </div>
+                    <div class="image-card">
+                        <img src="img/rainbow.png">
+                        <div class="image-caption">Lighting Mode 1 - Rainbow</div>
+                    </div>
+                    <div class="image-card">
+                        <img src="img/pulsing.png">
+                        <div class="image-caption">Lighting Mode 2 - Pulse</div>
+                    </div>
+                    <div class="image-card">
+                        <img src="img/focus.png">
+                        <div class="image-caption">Lighting Mode 3 - Focus</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p>2025 William S.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Loading screen logic
+        window.addEventListener('load', function () {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+
+            // Wait 1.5 seconds then fade out loading screen
+            setTimeout(function () {
+                loadingScreen.classList.add('fade-out');
+                mainContent.classList.add('visible');
+            }, 600);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

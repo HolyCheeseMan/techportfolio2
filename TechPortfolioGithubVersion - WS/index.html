@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>William S | Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-logo {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 20px rgba(255, 50, 80, 0.5));
+            margin-bottom: 32px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid rgba(255, 50, 80, 0.8);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: rgba(255, 50, 80, 0.8);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
+            color: #fff;
+        }
+
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hero {
+            padding: 80px 0 80px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+        }
+
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 80px;
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 20px rgba(255, 50, 80, 0.5));
+        }
+
+        .hero .subtitle {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 48px;
+            font-weight: 400;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: rgba(255, 50, 80, 0.15);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid rgba(255, 50, 80, 0.8);
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 20px rgba(255, 50, 80, 0.3),
+                inset 0 0 20px rgba(255, 50, 80, 0.1);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 50, 80, 0.25);
+            border-color: rgba(255, 50, 80, 1);
+            box-shadow: 0 8px 30px rgba(255, 50, 80, 0.4),
+                0 0 40px rgba(255, 50, 80, 0.3),
+                inset 0 0 30px rgba(255, 50, 80, 0.15);
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+            text-align: center;
+            color: rgba(255, 50, 80, 0.85);
+            filter: drop-shadow(0 0 15px rgba(255, 50, 80, 0.4));
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .about {
+            padding: 100px 0;
+            background: radial-gradient(circle at top, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+        }
+
+        .about-content {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 20px;
+            line-height: 1.7;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .features {
+            padding: 100px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 48px 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 50, 80, 0.3);
+            box-shadow: 0 8px 32px rgba(255, 50, 80, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .projects {
+            padding: 100px 0;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 50, 80, 0.4);
+            background: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 12px 40px rgba(255, 50, 80, 0.2);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 32px;
+        }
+
+        .project-content h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .project-content p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .cta-section p {
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 48px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .hero .subtitle {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .features-grid,
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section h2 {
+                font-size: 40px;
+            }
+
+            .loading-logo {
+                font-size: 36px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .feature-card,
+        .project-card {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .feature-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .project-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .project-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .project-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">WS</div>
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="container">
+            <nav>
+                <div class="logo">William S</div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="extra.html">Extra</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="container">
+            <section class="hero" id="home">
+                <div class="hero-content">
+                    <h1>2025<br>Tech Portfolio</h1>
+                    <p class="subtitle">Website Design • Arduino • 3D Modelling</p>
+                </div>
+                <a href="#projects" class="cta-button">View My Work</a>
+            </section>
+        </div>
+
+        <section class="about" id="about">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-subtitle">What I do.</p>
+                <div class="about-content">
+                    <p>I'm William, I enjoy doing digital projects every now and then and have created a few
+                        projects on my own and for school. This year I have done 3 main projects for school for each term.
+                    </p>
+                    <br>
+                    <p>Here are this years projects.</p>
+                    <br>
+                    <hr>
+                    <br>
+                    <b>Or read the summary of this year:</b>
+                </div>
+            <section class="hero" id="home">
+                <a href="#summary" class="cta-button">This Years Summary</a>
+            </section>
+            </div>
+        </section>
+
+        <section class="projects" id="projects">
+            <div class="container">
+                <h2 class="section-title"> Tech Projects</h2>
+                <p class="section-subtitle">This years work.</p>
+                <div class="projects-grid">
+                    <a href="project-website.html" class="project-card">
+                        <div class="project-image">
+                            <img src="img/recipe.png" alt="Project One">
+                        </div>
+                        <div class="project-content">
+                            <h3>Website Design</h3>
+                            <p>Creating my first website portfolio, and making recipe designs for an assessment.
+                            </p>
+                        </div>
+                    </a>
+                    <a href="project-arduino.html" class="project-card">
+                        <div class="project-image">
+                            <img src="img/arduino.png" alt="Project Two">
+                        </div>
+                        <div class="project-content">
+                            <h3>Arduino</h3>
+                            <p>Creating a neopixel lighting system with 3 modes to switch on.
+                            </p>
+                        </div>
+                    </a>
+                    <a href="project-blender.html" class="project-card">
+                        <div class="project-image">
+                            <img src="img/3d.png" alt="Project Three">
+                        </div>
+                        <div class="project-content">
+                            <h3>Blender</h3>
+                            <p>Creating a 3D animation in blender of a megastructure in space.</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <section class="summary" id="summary">
+            <div class="container">
+                <h2 class="section-title"> Summary</h2>
+                <p class="section-subtitle">Summary of this year.</p>
+                <div class="about-content">
+                    <p>Overall, 2025 has been a great, and very fun year. All three projects were interesting and things I hadn't tried yet.</p>
+                    <br>
+                    <p>In the beginning of the year, I already had some coding progress on things like python, but with the first project I learnt a new language which was HTML. This really helped me have a further reach of skills and allowed me to make cool websites like this.</p>
+                    <P>Doing the arduino project was also very cool, as I hadn't worked with real life eletronics before. Doing this helped me get hands on experience in building cool eletrical things and was a great experience.</P>
+                    <P>And the most recent project, blender, was probably my favourite. It allowed me to learn something I had wanted to do for years, which was 3d Modeling. I put it to the next level with animations and details and I am proud of my work. It helped me learn a new software and increase skills.</P>
+                    <br>
+                    <p>Therefore, with these three projects I learnt a lot of skills and had great fun making cool software, models and eletronics.</p>
+                </div>
+            </div>
+        </section>
+
+        <br>
+
+        <footer>
+            <div class="container">
+                <p>2025 William S.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Loading screen logic
+        window.addEventListener('load', function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Wait 1.5 seconds then fade out loading screen
+            setTimeout(function() {
+                loadingScreen.classList.add('fade-out');
+                mainContent.classList.add('visible');
+            }, 400);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,270 @@
+body {
+    background-color: #627275;
+
+}
+
+.returnbutton {
+    border: 1px solid #9ab1e4;
+    border-radius: 10px;
+    width: 90px;
+    height: 24px;
+    text-align: center;
+    background-color: #9ab1e4;
+    transition: 0.3s;
+    position: fixed;
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+
+  right: 3vw;
+  bottom: 3vh;
+  width: 12vh
+  
+}
+.returnbutton:hover {
+    border: 1px solid #6084d1;
+    border-radius: 10px;
+    width: 90px;
+    height: 24px;
+    text-align: center;
+    background-color: #6084d1;
+    transition: 0.3s;
+    position: fixed;
+    font-size: 20px;
+    text-decoration: none;
+    color: black;
+    font-weight: 700;
+}
+
+
+.backgroundborder {
+    padding: 1% 23%
+}
+
+.contentborder {
+    padding: 25px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+
+}
+
+#omelettejpeg {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+.titleh2 {
+    font-family: "Outfit", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    margin-top: -0.66%;
+    font-size: 200%;
+    text-align: center;
+}
+
+h2,
+h3 {
+    font-family: "Young Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.h3normal {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 20px;
+    color: #16407b;
+}
+
+p,
+a {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    color: #4f4544
+}
+
+.nutritionaldiv {
+    margin: 4%;
+    padding: 4%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #acddc2;
+    transition-duration: 0.3s;
+}
+
+.nutritionaldiv:hover {
+    margin: 4%;
+    padding: 4%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #87c5a2;
+    transition-duration: 0.3s;
+}
+
+.description {
+    margin: 4%;
+    padding: 4%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #b6b2ed;
+    transition-duration: 0.3s;
+}
+
+.description:hover {
+    margin: 4%;
+    padding: 4%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #938edf;
+    transition-duration: 0.3s;
+}
+
+.special {
+    margin: 5%;
+    padding: 5%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #edb2da;
+    transition-duration: 0.3s;
+}
+
+.special:hover {
+    margin: 5%;
+    padding: 5%;
+    border: 0px solid;
+    border-radius: 10px;
+    background-color: #dc93c4;
+    transition-duration: 0.3s;
+}
+
+#descriptiontext {
+    color: #1b1e57;
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+    margin-top: -0.56%;
+}
+
+#nutritionh3 {
+    color: #165e2e;
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+    margin-top: -0.56%;
+}
+
+.specialinner {
+    margin: 4%;
+    padding: 2%;
+}
+
+.listprep {
+    list-style-type: disc;
+    font-family: "Outfit", sans-serif;
+    color: #541931;
+}
+
+.listingredients {
+    list-style-type: disc;
+    font-family: "Outfit", sans-serif;
+    color: #794f48;
+}
+
+.listinginstructions {
+    font-family: "Outfit", sans-serif;
+    color: #407bce;
+    font-weight: 700;
+}
+
+b {
+    font-weight: 600;
+    font-family: "Outfit", sans-serif;
+    color: #4f4544;
+}
+
+#preptime {
+    color: #5b2239;
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+}
+
+.listprep {
+    list-style-type: disc;
+    font-family: "Outfit", sans-serif;
+    color: #541931;
+}
+
+.nutritionlist {
+    list-style-type: disc;
+    font-family: "Outfit", sans-serif;
+    color: #0a5b1a;
+}
+
+.nutritionlistcol {
+    color: #19752b;
+    font-weight: 700;
+}
+
+
+.topnav {
+    overflow: hidden;
+    background-color: #1b263b;
+    text-align: center;
+    margin-left: -0.66%;
+    margin-right: -0.66%;
+    margin-top: -0.66%;
+}
+
+.fadetopnav {
+    overflow: hidden;
+    background-color: #4d8589;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    padding: 1px;
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    border-radius: 5px;
+    margin: 0;
+    font-family: "Rubik", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    text-align: center;
+    margin: 0 auto;
+
+
+}
+
+.topnav a:hover {
+    background-color: #c7cfdb;
+    color: black;
+    border-radius: 5px;
+    margin: 0;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.topnav a.active {
+    background-color: #415a77;
+    color: white;
+    margin: 0;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.topnav a.active:hover {
+    background-color: #778da9;
+    color: rgb(255, 255, 255);
+    margin: 0;
+    text-align: center;
+    margin: 0 auto;
+}
